@@ -80,7 +80,7 @@ async def bcast(event):
                      [Button.inline(f"FAILED: {len(failed)}", data="none")]])
     
     
-@Drone.on(events.NewMessage(incoming=True, from_users=AUTH_USERS , pattern="^/disallow (.*)" ))
+@Drone.on(events.NewMessage(incoming=True, from_users=AUTH_USERS , pattern="^/banx (.*)" ))
 async def bban(event):
     c = event.pattern_match.group(1)
     if not c:
@@ -92,22 +92,22 @@ async def bban(event):
         return await event.reply("I cannot ban an AUTH_USER")
     xx = await db.is_banned(int(c))
     if xx is True:
-        return await event.reply("User is already disallowed!")
+        return await event.reply("This User is already banned!")
     else:
         await db.banning(int(c))
-        await event.reply(f"{c} is now disallowed.")
+        await event.reply(f"{c} Done, Banned!.")
     admins.remove(f'{int(AUTH)}')
     
-@Drone.on(events.NewMessage(incoming=True, from_users=AUTH_USERS , pattern="^/allow (.*)" ))
+@Drone.on(events.NewMessage(incoming=True, from_users=AUTH_USERS , pattern="^/unbanx (.*)" ))
 async def unbban(event):
     xx = event.pattern_match.group(1)
     if not xx:
         await event.reply("Allow who?")
     xy = await db.is_banned(int(xx))
     if xy is False:
-        return await event.reply("User is already allowed!")
+        return await event.reply("This User is already Unban!")
     await db.unbanning(int(xx))
-    await event.reply(f"{xx} Allowed! ")
+    await event.reply(f"{xx} Unbanned! ")
     
 
     
